@@ -1,0 +1,236 @@
+/* Member 1 (Front-End): Help Desk client styles */
+
+.root {
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 13px;
+    -fx-background-color: #f4f6f8;
+    -hd-primary: #1f5f8b;
+    -hd-primary-dark: #174a6c;
+    -hd-text: #1e2a33;
+    -hd-muted: #5c6b77;
+    -hd-border: #d5dce2;
+}
+
+/* ---------- login / register ---------- */
+
+.login-root {
+    -fx-background-color: #e9eef2;
+}
+
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-color: -hd-border;
+    -fx-border-radius: 8;
+    -fx-padding: 28 32 28 32;
+}
+
+.app-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -hd-text;
+}
+
+.app-subtitle {
+    -fx-text-fill: -hd-muted;
+}
+
+.form-label {
+    -fx-text-fill: -hd-text;
+    -fx-font-weight: bold;
+}
+
+.hint {
+    -fx-text-fill: -hd-muted;
+    -fx-font-size: 11px;
+}
+
+.link {
+    -fx-text-fill: -hd-primary;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+/* ---------- header bar ---------- */
+
+.header-bar {
+    -fx-background-color: -hd-primary;
+    -fx-padding: 10 18 10 18;
+}
+
+.header-title {
+    -fx-text-fill: white;
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+}
+
+.header-user {
+    -fx-text-fill: #dbe7f0;
+}
+
+.header-bar .button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-border-color: #8fb3cc;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+}
+
+.header-bar .button:hover {
+    -fx-background-color: -hd-primary-dark;
+}
+
+/* ---------- panels ---------- */
+
+.panel {
+    -fx-background-color: white;
+    -fx-border-color: -hd-border;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 14;
+}
+
+.panel-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -hd-text;
+}
+
+.section-label {
+    -fx-font-weight: bold;
+    -fx-text-fill: -hd-muted;
+}
+
+.status-bar {
+    -fx-background-color: #e3e8ec;
+    -fx-padding: 5 14 5 14;
+}
+
+.status-bar .label {
+    -fx-text-fill: -hd-muted;
+    -fx-font-size: 12px;
+}
+
+/* ---------- buttons ---------- */
+
+.button {
+    -fx-cursor: hand;
+}
+
+.primary-button {
+    -fx-background-color: -hd-primary;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4;
+}
+
+.primary-button:hover {
+    -fx-background-color: -hd-primary-dark;
+}
+
+.danger-button {
+    -fx-background-color: #b23b3b;
+    -fx-text-fill: white;
+    -fx-background-radius: 4;
+}
+
+.danger-button:hover {
+    -fx-background-color: #8f2d2d;
+}
+
+/* ---------- validation ---------- */
+
+.field-error {
+    -fx-border-color: #c0392b;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 3;
+}
+
+/* ---------- tables ---------- */
+
+.table-view {
+    -fx-border-color: -hd-border;
+}
+
+.table-row-cell:selected .label {
+    -fx-text-fill: white;
+}
+
+/* status / priority badges in table cells */
+.badge {
+    -fx-padding: 1 8 1 8;
+    -fx-background-radius: 10;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.priority-low { -fx-background-color: #e4ecef; -fx-text-fill: #46606e; }
+.priority-medium { -fx-background-color: #e1ecf7; -fx-text-fill: #1f5f8b; }
+.priority-high { -fx-background-color: #fbe9d2; -fx-text-fill: #9a5a00; }
+.priority-urgent { -fx-background-color: #f7d6d6; -fx-text-fill: #a12626; }
+
+.status-new { -fx-background-color: #e1ecf7; -fx-text-fill: #1f5f8b; }
+.status-assigned { -fx-background-color: #ece4f6; -fx-text-fill: #5b3a8a; }
+.status-in_progress { -fx-background-color: #fbe9d2; -fx-text-fill: #9a5a00; }
+.status-pending { -fx-background-color: #f4efcf; -fx-text-fill: #7a6a00; }
+.status-resolved { -fx-background-color: #dcefe0; -fx-text-fill: #2b6b3a; }
+.status-closed { -fx-background-color: #e4e7ea; -fx-text-fill: #4d5a64; }
+.status-reopened { -fx-background-color: #f7d6d6; -fx-text-fill: #a12626; }
+
+/* ---------- notifications ---------- */
+
+.notification-list {
+    -fx-background-color: transparent;
+}
+
+.connection-online {
+    -fx-text-fill: #2b6b3a;
+    -fx-font-size: 11px;
+}
+
+.connection-offline {
+    -fx-text-fill: #9a5a00;
+    -fx-font-size: 11px;
+}
+
+/* ---------- comments ---------- */
+
+.comment-box {
+    -fx-background-color: #f7f9fa;
+    -fx-border-color: -hd-border;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-padding: 8;
+}
+
+.comment-author {
+    -fx-font-weight: bold;
+    -fx-text-fill: -hd-text;
+}
+
+.comment-time {
+    -fx-text-fill: -hd-muted;
+    -fx-font-size: 11px;
+}
+
+/* ---------- reports ---------- */
+
+.stat-value {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -hd-text;
+}
+
+.stat-caption {
+    -fx-text-fill: -hd-muted;
+}
+
+/* ---------- charts ---------- */
+
+.chart-bar {
+    -fx-bar-fill: #1f5f8b;
+}
+
+.chart-title {
+    -fx-font-size: 14px;
+}

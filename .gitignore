@@ -1,0 +1,22 @@
+# Maven build output
+target/
+
+# Log files written when the programs run
+logs/
+*.log
+
+# Eclipse project settings (Eclipse recreates these on import)
+.settings/
+.classpath
+.project
+.metadata/
+bin/
+
+# IntelliJ
+.idea/
+*.iml
+
+# OS junk
+.DS_Store
+__MACOSX/
+Thumbs.db
