@@ -50,8 +50,8 @@ To change one, edit `client.properties`. When running `Launcher` from an IDE, yo
   - Notifications are read on their own thread (`notification/NotificationListener`).
 - **Concurrent assignment:** when the server returns 409, the admin sees a "Ticket Assignment Conflict" alert and the table reloads.
 
-## Notes for the team
+## Notifications and accounts
 
-- **Member 4 (notification server).** On connect, the client sends a `Request("REGISTER", userId, role, null)` object (Lab 09 style, `ObjectOutputStream`). The server replies with a `Response`, then sends one `Response` per notification, which is shown in the Notifications panel and reloads the dashboard. The shared classes `Notification`, `Request` and `Response` are in `jm.edu.utech.helpdesk.notification.model` and must match the server's exactly. If the server is down, the client keeps working and retries every 10 seconds.
+- **Notification Server.** On connect, the client sends a `Request("REGISTER", userId, role, null)` object with an `ObjectOutputStream`. The server replies with a `Response`, then sends one `Response` per notification, which is shown in the Notifications panel and reloads the dashboard. The shared classes `Notification`, `Request` and `Response` are in `jm.edu.utech.helpdesk.notification.model` and must match the server's exactly. If the server is down, the client keeps working and retries every 10 seconds.
 - **Technicians.** Login returns a `UserDTO`, so the client finds the technician ID by matching `userId` in `GET /api/technicians`.
-- **Member 3.** The client needs a seeded ADMIN account to log in as an administrator. Registration only creates USER accounts.
+- **Admin account.** Registration only creates USER accounts. Log in as the default admin (`admin` / `Admin@123`, created by `helpdesk.sql`) to manage users and technicians.

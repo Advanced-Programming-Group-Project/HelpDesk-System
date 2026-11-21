@@ -1,6 +1,6 @@
 -- member 3 (Data & Persistence)
 -- University Help Desk database. Run this once in phpMyAdmin or MySQL Workbench
--- before starting the backend (Guided Lab 08, Activity 1).
+-- before starting the backend.
 
 CREATE DATABASE IF NOT EXISTS helpdesk_db;
 
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS comments (
 );
 
 -- default administrator account
--- username: admin    password: Admin@123   (hash made with PasswordHasher - change it after the demo)
+-- username: admin    password: Admin@123   (hash made with PasswordHasher)
 INSERT INTO users (username, password_hash, full_name, email, role, active, created_at)
 SELECT 'admin', 'PVM+/ZlSMApX6BELdBQ4RQ==:KJwOcCQ3keVecrPnkiLNZjuwOhgh8W/sc7Vd35IkggI=',
        'System Administrator', 'admin@utech.edu.jm', 'ADMIN', TRUE, NOW(6)
