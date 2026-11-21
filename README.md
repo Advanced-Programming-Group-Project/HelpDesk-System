@@ -16,7 +16,7 @@ JavaFX Client --(REST/JSON, port 8080)--> Spring Boot backend --(JPA)--> MySQL
 |---|---|---|
 | [`helpdesk-client`](helpdesk-client) | JavaFX desktop client: login, user, technician and admin dashboards | Member 1 – Front-End |
 | [`helpdesk-service`](helpdesk-service) | Spring Boot REST API: controllers, services, DTOs | Member 2 – Backend |
-| *(JPA entities, repositories, MySQL)* | Database and persistence layer, added inside `helpdesk-service` | Member 3 – Data & Persistence |
+| [`helpdesk-service/database`](helpdesk-service/database) | MySQL script; JPA entities (`model`) and `@Repository` classes (`repository`) inside `helpdesk-service` | Member 3 – Data & Persistence |
 | [`notification-server`](notification-server) | TCP notification server, plus the notification and Log4j2 parts of `helpdesk-service` | Member 4 – Systems |
 | [`docs`](docs) | Guided labs for Member 4's parts | Member 4 |
 
@@ -28,7 +28,7 @@ Requires **JDK 21** or later.
 
 Start them in this order:
 
-1. **MySQL**, with the help desk database set up (Member 3).
+1. **MySQL** (the same server as Guided Lab 08). Run [`helpdesk-service/database/helpdesk.sql`](helpdesk-service/database/helpdesk.sql) once in phpMyAdmin or MySQL Workbench. It creates `helpdesk_db`, the 4 tables and the admin account (**admin / Admin@123**). If your MySQL isn't on port 3307 with `root` / `usbw`, change the 3 `spring.datasource` lines in `helpdesk-service/src/main/resources/application.properties`.
 2. **Notification Server**: run `notification-server/.../server/NotificationServer.java`. It listens on port **5000**.
 3. **Backend**: run `helpdesk-service/.../HelpDeskApplication.java`. The REST API is on port **8080**.
 4. **Client**: run `helpdesk-client/.../Launcher.java`, then log in.
@@ -60,7 +60,5 @@ Each program writes an application log and an error log (ERROR and FATAL only) t
 
 - [x] Notification Server: built and tested.
 - [x] Backend notifications and Log4j2: `SocketNotificationService`, `SendNotificationTask`, `log4j2.xml` added to `helpdesk-service`.
-- [ ] Database layer (Member 3): JPA annotations, repository implementations, MySQL settings.
-- [ ] Client notifications (Member 1): `helpdesk-client`'s `NotificationListener` still uses a plain-text protocol on port 5050. It needs to:
-  - use the shared `Request` / `Response` objects with `ObjectOutputStream` / `ObjectInputStream`;
-  - connect on port 5000 (`notification.port` in `client.properties`).
+- [x] Database layer: JPA entities (User, Technician, Ticket, Comment), `@Repository` classes, MySQL script and settings. Tested end to end with a MySQL-compatible database.
+- [x] Client notifications: `helpdesk-client`'s `NotificationListener` uses the shared `Request` / `Response` objects on port 5000.

@@ -1,27 +1,28 @@
 package jm.edu.utech.helpdesk.client.notification;
-// Member 1 (Front-End)
+// Member 1 (Front-End) - connection code updated by Member 4 to match the Notification Server
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.util.function.Consumer;
 
 import javafx.application.Platform;
 
 import jm.edu.utech.helpdesk.client.model.UserDTO;
 import jm.edu.utech.helpdesk.client.util.AppConfig;
+import jm.edu.utech.helpdesk.notification.model.Notification;
+import jm.edu.utech.helpdesk.notification.model.Request;
+import jm.edu.utech.helpdesk.notification.model.Response;
 
 // connects to the TCP notification server (Member 4) on a background thread
-// and passes each line it receives to the GUI.
+// and passes each notification it receives to the GUI.
 //
-// protocol (plain text, one message per line, UTF-8):
-//   client -> server on connect:  REGISTER <userId> <role> <username>
-//   server -> client:             any line, shown as-is in the notifications panel
-// member 4 input: change register()/the line format here if the server uses something else.
+// protocol (Serializable objects, as in Lab 09):
+//   client -> server on connect:  Request("REGISTER", userId, role, null)
+//   server -> client:             Response - first the registration reply,
+//                                 then one Response per notification
 public class NotificationListener {
 
     private static final int RETRY_SECONDS = 10;
@@ -58,26 +59,30 @@ public class NotificationListener {
 
     private void listenLoop() {
         String host = AppConfig.get("notification.host", "localhost");
-        int port = AppConfig.getInt("notification.port", 5050);
+        int port = AppConfig.getInt("notification.port", 5000);
 
         while (running) {
             try (Socket s = new Socket()) {
                 socket = s;
                 s.connect(new InetSocketAddress(host, port), 5000);
 
-                BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream(), StandardCharsets.UTF_8));
-                PrintWriter out = new PrintWriter(s.getOutputStream(), true, StandardCharsets.UTF_8);
-                register(out);
-                fx(() -> onConnectionChange.accept(true));
+                // output stream first, then input stream (same order as the server)
+                ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(s.getInputStream());
 
-                String line;
-                while (running && (line = in.readLine()) != null) {
-                    String message = line.trim();
-                    if (!message.isEmpty()) {
-                        fx(() -> onMessage.accept(message));
+                if (register(out, in)) {
+                    fx(() -> onConnectionChange.accept(true));
+
+                    while (running) {
+                        Response response = (Response) in.readObject();
+                        Notification notification = response.getNotification();
+                        if (notification != null) {
+                            String message = notification.toString();
+                            fx(() -> onMessage.accept(message));
+                        }
                     }
                 }
-            } catch (IOException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 // server not running or connection dropped - try again shortly
             } finally {
                 socket = null;
@@ -90,8 +95,11 @@ public class NotificationListener {
         }
     }
 
-    private void register(PrintWriter out) {
-        out.println("REGISTER " + user.id() + " " + user.role() + " " + user.username());
+    // sends REGISTER with the logged-in user's id and role; returns true if the server accepted it
+    private boolean register(ObjectOutputStream out, ObjectInputStream in) throws IOException, ClassNotFoundException {
+        out.writeObject(new Request("REGISTER", user.id(), user.role().toString(), null));
+        Response reply = (Response) in.readObject();
+        return reply.isSuccess();
     }
 
     private void sleepBeforeRetry() {

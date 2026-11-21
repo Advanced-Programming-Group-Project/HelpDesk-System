@@ -1,23 +1,64 @@
 package jm.edu.utech.helpdesk.model;
 //created by rickayla mcneil 2111687
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.*;
 
 // a support ticket
-// member 3 input: JPA annotations
+// member 3: JPA entity mapped to the tickets table
+@Entity
+@Table(name = "tickets")
 public class Ticket {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)   // ticket ID is auto-generated
+    @Column(name = "ticket_id")
     private Long id;
+
+    @Column(nullable = false, length = 150)
     private String subject;
+
+    @Column(nullable = false, length = 2000)
     private String description;
+
+    @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
     private Priority priority;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
     private TicketStatus status;
+
+    // Many-to-One: many tickets belong to one user (the User side is One-to-Many)
+    @ManyToOne
+    @JoinColumn(name = "created_by", nullable = false)
     private User createdBy;
+
+    // Many-to-One: many tickets can be assigned to one technician (null until assigned)
+    @ManyToOne
+    @JoinColumn(name = "technician_id")
     private Technician assignedTechnician;
+
+    @Column(name = "resolution_notes", length = 2000)
     private String resolutionNotes;
+
+    @Column(name = "resolved_date")
     private LocalDateTime resolvedDate;   // used for average resolution time
+
+    @Column(name = "closed_date")
     private LocalDateTime closedDate;
+
+    @Column(name = "last_updated", nullable = false)
     private LocalDateTime lastUpdated;
+
+    // One-to-Many: one ticket has many comments
+    @OneToMany(mappedBy = "ticket")
+    private List<Comment> comments = new ArrayList<>();
 
     public Ticket() {
     }
@@ -126,5 +167,10 @@ public class Ticket {
 
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+
+    // comments on this ticket (only loaded while the EntityManager is open)
+    public List<Comment> getComments() {
+        return comments;
     }
 }

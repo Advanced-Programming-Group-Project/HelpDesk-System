@@ -1,13 +1,35 @@
 package jm.edu.utech.helpdesk.model;
 //created by rickayla mcneil 2111687
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.*;
+
 // a technician, linked to their user account
-// member 3 input: JPA annotations
+// member 3: JPA entity mapped to the technicians table
+@Entity
+@Table(name = "technicians")
 public class Technician {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "technician_id")
     private Long id;
+
+    // One-to-One: each technician is linked to one user account
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
+
+    @Column(length = 100)
     private String specialization;   // e.g. Networking, Hardware
+
+    @Column(nullable = false)
     private boolean available;
+
+    // One-to-Many: one technician is assigned many tickets
+    @OneToMany(mappedBy = "assignedTechnician")
+    private List<Ticket> tickets = new ArrayList<>();
 
     public Technician() {
     }
@@ -48,5 +70,10 @@ public class Technician {
 
     public void setAvailable(boolean available) {
         this.available = available;
+    }
+
+    // tickets assigned to this technician (only loaded while the EntityManager is open)
+    public List<Ticket> getTickets() {
+        return tickets;
     }
 }

@@ -19,7 +19,7 @@ Requires JDK 21 or newer. JDK 23 is fine.
 | key | default | what |
 |---|---|---|
 | `api.baseUrl` | `http://localhost:8080/api` | Spring Boot service (Member 2) |
-| `notification.host` / `notification.port` | `localhost` / `5050` | TCP notification server (Member 4) |
+| `notification.host` / `notification.port` | `localhost` / `5000` | TCP notification server (Member 4) |
 | `refresh.seconds` | `15` | technician dashboard auto-refresh |
 
 To change one, edit `client.properties`. When running `Launcher` from an IDE, you can instead add a VM argument such as `-Dapi.baseUrl=http://192.168.0.10:8080/api`. (`mvn javafx:run -D...` does **not** pass the value to the app.)
@@ -52,6 +52,6 @@ To change one, edit `client.properties`. When running `Launcher` from an IDE, yo
 
 ## Notes for the team
 
-- **Member 4 (notification server).** On connect, the client sends one line: `REGISTER <userId> <role> <username>`. After that it shows every line the server sends in the Notifications panel and reloads the dashboard. If your server uses a different format, the only method to change is `NotificationListener.register()`. If the server is down, the client keeps working and retries every 10 seconds.
+- **Member 4 (notification server).** On connect, the client sends a `Request("REGISTER", userId, role, null)` object (Lab 09 style, `ObjectOutputStream`). The server replies with a `Response`, then sends one `Response` per notification, which is shown in the Notifications panel and reloads the dashboard. The shared classes `Notification`, `Request` and `Response` are in `jm.edu.utech.helpdesk.notification.model` and must match the server's exactly. If the server is down, the client keeps working and retries every 10 seconds.
 - **Technicians.** Login returns a `UserDTO`, so the client finds the technician ID by matching `userId` in `GET /api/technicians`.
 - **Member 3.** The client needs a seeded ADMIN account to log in as an administrator. Registration only creates USER accounts.
